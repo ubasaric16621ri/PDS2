@@ -59,12 +59,14 @@ public class Poruka {
 
     @Override
     public String toString() {
-        return "Poruka{" +
-                "autor='" + autor + '\'' +
-                ", tekst='" + tekst + '\'' +
-                ", id=" + id +
-                ", editovana=" + editovana +
-                ", replyNa='" + replyNa + '\'' +
-                '}';
+        String out = "[" + id + "] " + autor + ": ";
+        if (replyNa != null) {
+            out += "(odgovor na: \"" + ": " + replyNa + "\") ";
+        }
+        out += tekst;
+        if (editovana) {
+            out += " (editovano)";
+        }
+        return out;
     }
 }

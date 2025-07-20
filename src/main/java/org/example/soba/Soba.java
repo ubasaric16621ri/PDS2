@@ -1,11 +1,11 @@
-package org.example.controller;
+package org.example.soba;
 
 import org.eclipse.paho.client.mqttv3.*;
 import java.util.*;
 
-public class Kontroler {
+public class Soba {
     private static final String broker = "tcp://localhost:1883";
-    private static final String temaSobe = "sobe";
+    private static final String topic = "sobe";
     private static final Scanner scanner = new Scanner(System.in);
     private static MqttClient client;
     private static String sobaId;
@@ -20,13 +20,10 @@ public class Kontroler {
 
             System.out.println("Soba kreirana sa ID: " + sobaId);
 
-            // Višestruka objava sobe da bi klijent video
-            for (int i = 0; i < 5; i++) {
-                client.publish(temaSobe, new MqttMessage(sobaId.getBytes()));
-                Thread.sleep(500);
-            }
+            MqttMessage poruka = new MqttMessage(sobaId.getBytes());
+            poruka.setRetained(true);
+            client.publish(topic, poruka);
 
-            // Pretplata na zahteve
             client.subscribe("zahtev/" + sobaId, (topic, msg) -> {
                 String korisnik = new String(msg.getPayload());
                 System.out.println("Korisnik '" + korisnik + "' traži pristup sobi.");
